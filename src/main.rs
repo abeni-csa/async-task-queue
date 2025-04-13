@@ -38,3 +38,12 @@ impl AsyncSleep {
         }
     }
 }
+impl Future for AsyncSleep {
+    type Output = ();
+    fn poll(
+        self: Pin<&mut Self>,
+        cx: &mut std::task::Context<'_>,
+    ) -> std::task::Poll<Self::Output> {
+        todo!();
+    }
+}
