@@ -1,0 +1,10 @@
+[package]
+name = "async-task-queue"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+async-task = { version = "4.7.1" }
+futures-lite = { version = "2.2.0" }
+once_cell = { version = "1.21.3" }
+flume = { version = "0.11.1" }
