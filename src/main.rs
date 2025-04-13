@@ -10,5 +10,17 @@ where
     F: Future<Output = T> + Send + 'static,
     T: Send + 'static,
 {
-    todo!();
+    static QUEUE: Lazy<flume::Sender<Runnable>> = Lazy::new(|| {
+        let (tx, rx) = flume::unbounded::<Runnable>();
+        thread::spawn(move || {
+            while let Ok(runnable) = rx.recv() {
+                let _ = catch_unwind(|| runnable.run());
+            }
+        });
+        tx
+    });
+    let schedule = |runnabel| QUEUE.send(runnabel).unwrap();
+    let (runnable, task) = async_task::spawn(future, schedule);
+    runnable.schedule();
+    task
 }
