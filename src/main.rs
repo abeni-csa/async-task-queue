@@ -2,9 +2,9 @@ use async_task::{Runnable, Task};
 use futures_lite::future;
 use once_cell::sync::Lazy;
 use std::pin::Pin;
+use std::task::Poll;
 use std::time::{Duration, Instant};
 use std::{panic::catch_unwind, thread};
-
 fn main() {}
 fn spawn_task<F, T>(future: F) -> Task<T>
 where
@@ -44,6 +44,12 @@ impl Future for AsyncSleep {
         self: Pin<&mut Self>,
         cx: &mut std::task::Context<'_>,
     ) -> std::task::Poll<Self::Output> {
-        todo!();
+        let elapsed_time = self.start_itme.elapsed();
+        if elapsed_time >= self.duration {
+            Poll::Ready(())
+        } else {
+            cx.waker().wake_by_ref();
+            Poll::Pending
+        }
     }
 }
