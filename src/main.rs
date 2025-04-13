@@ -2,6 +2,7 @@ use async_task::{Runnable, Task};
 use futures_lite::future;
 use once_cell::sync::Lazy;
 use std::pin::Pin;
+use std::time::{Duration, Instant};
 use std::{panic::catch_unwind, thread};
 
 fn main() {}
@@ -23,4 +24,17 @@ where
     let (runnable, task) = async_task::spawn(future, schedule);
     runnable.schedule();
     task
+}
+struct AsyncSleep {
+    start_itme: Instant,
+    duration: Duration,
+}
+
+impl AsyncSleep {
+    fn new(duration: Duration) -> Self {
+        Self {
+            start_itme: Instant::now(),
+            duration,
+        }
+    }
 }
